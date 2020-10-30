@@ -1,0 +1,89 @@
+name: b2g-gsi
+on: 
+  repository_dispatch:
+      types: 
+      - gsi_release
+env:
+  SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}} 
+  image: ${{github.event.client_payload.image}}
+  PROIMAGE: ${{github.event.client_payload.image}}_${{github.event.client_payload.device_name}}
+  remotepath: ${{github.event.client_payload.image}}_${{github.event.client_payload.device_name}}
+  work: /Volumes/${{github.event.client_payload.image}} 
+  out_work: /Volumes/out
+  action_type: ${{ github.event.action }} 
+  gecko_version:  ${{github.event.client_payload.gecko_version}} 
+  device_name: ${{github.event.client_payload.device_name}} 
+  device_arch: ${{github.event.client_payload.device_arch}} 
+  systemimage: system.img.xz
+  sourceimage: source
+  outimage: out
+
+jobs:
+  gsi_release:
+    runs-on: ubuntu-latest
+    steps:
+      
+    - name: Initialization system environment
+      run: |
+        df -h
+        git config --global user.name "ci"
+        git config --global user.email "ci@github.com"
+        #ssh
+        mkdir -p ~/.ssh
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        #rclone
+        mkdir -p ~/.config/rclone
+        git clone git@github.com:ittat/tmp.git
+        cd tmp
+        mv ./rclone.conf ~/.config/rclone
+        brew install rclone
+        rclone ls itd:test
+        
+        ####
+        echo "::set-env name=RELEASE_REF::b2g_${device_name}_$(date +%Y-%m-%d)"
+        
+    - name: Download from remote
+      run: |
+        pwd
+        rclone copy  itd:ci/${remotepath}/${systemimage} ./
+        rclone copy  itd:ci/${remotepath}/${gecko_version} ./
+        ls -al -h
+        
+        
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ env.RELEASE_REF }}
+        draft: false
+        prerelease: false
+        body: |
+          ## List
+          type: ${{ env.device_name }} 
+          systemimage - ${{ env.device_name }} - system.img.xz
+          b2g_core - ${{ env.device_arch }} - ${{ env.gecko_version }}
+          
+          
+    - name: Update Release Asset - system & boot
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: system.img.xz
+          asset_name: system.img.xz
+          asset_content_type: application/x-xz
+
+          
+    - name: Update Release Asset 
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.gecko_version }}
+          asset_name: ${{ env.gecko_version }}
+          asset_content_type: application/gzip
