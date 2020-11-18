@@ -1,0 +1,33 @@
+name: template_config
+on: 
+  push:
+    branches: 
+      - aosp
+
+# NEED  
+# 1. secrets.GIT_ACCESS_TOKEN
+# 2. secrets.RCLONE
+# 3. device_name eg；onyx(oneplu x), bacon(oneplus one), phhgsi_arm64_a(phh's gsi) etc.
+# 4. build_device_tag: eg: full-onyx-eng, full-bacon-userdebug etc.
+# 5. repo_dispatches: https://api.github.com/repos/(you id)/(you repo name)/dispatches
+# 6. android_source: 
+#         remote soucre address: 
+#          https://android.googlesource.com/platform/manifest -b android-10.0.0_r41
+# for example:
+env:
+  GIT_ACCESS_TOKEN: ${{secrets.GIT_ACCESS_TOKEN}}
+  device_name: phhgsi_arm64_a
+  build_device_tag: treble_arm64_avN-userdebug
+  repo_dispatches: "https://api.github.com/repos/ittat-store/build-android-actions/dispatches"
+  android_source: "https://android.googlesource.com/platform/manifest"
+  android_branch: "android-10.0.0_r41"
+
+jobs: 
+  config:
+    runs-on: ubuntu-latest
+    steps:
+    - name: WebHook          
+      run: |
+        curl -H "Authorization: token ${GIT_ACCESS_TOKEN}"   --request POST   --data '{"event_type": "repack","client_payload": {"device_name":"'${device_name}'", "build_device_tag":"'${build_device_tag}'", "repo_dispatches":"'${repo_dispatches}'", "android_source":"'${android_source}'", "android_branch":"'${android_branch}'"}}'  ${repo_dispatches}
+ #       curl -H "Authorization: token ${GIT_ACCESS_TOKEN}"   --request POST   --data '{"event_type": "build","client_payload": {"device_name":"'${device_name}'", "build_device_tag":"'${build_device_tag}'", "repo_dispatches":"'${repo_dispatches}'", "android_source":"'${android_source}'"}}'  ${repo_dispatches}
+     
