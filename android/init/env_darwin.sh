@@ -6,6 +6,7 @@ set -e
         ls /Applications/Xcode_*
         #sudo xcode-select --switch /Applications/Xcode_11.app/Contents/Developer
         sudo xcode-select --switch /Applications/Xcode_12.app/Contents/Developer
+        echo [Set] Xcode_12
         
         ####install
         brew install expect  gnu-sed ccache coreutils zstd gcc perl cpanm unzip binutils repo xmlstarlet
@@ -26,4 +27,7 @@ set -e
         #your drive key
         echo "$RCLONE" > ~/.config/rclone/rclone.conf
         brew install rclone
-        rclone ls itd:test
+        echo [TEST] rclone
+        rclone ls itd:
+        echo [Done] rclone
+        

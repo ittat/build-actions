@@ -15,11 +15,12 @@ env:
   android_branch: ${{github.event.client_payload.android_branch}}
 
   # DON'T CHANGE IT 
-  image: aosp
-  work: /Volumes/aosp
+  image: android
+  sourceimage: android
+  work: /Volumes/android
   out_work: /Volumes/out
-  sourceimage: aosp
   outimage: out
+  remotepath: android_${{github.event.client_payload.device_name}}
   
 # gdrive filer 
 #   |--custom_image_name(image)
@@ -47,7 +48,6 @@ jobs:
         ./android/init/env_darwin.sh
         ./android/source/create_sparseimage.sh
     
-    # Fetch source from $android_source
     - name: Fetch source
       run: |    
         ./android/source/repo_source.sh
@@ -55,29 +55,7 @@ jobs:
     - name: Fix source
       run: |    
         echo Fix source 
-        cd ${work}
-        # Add something necessarily  
-        # for example :
-
-        ############## start ##############
-        ## add phh gsi local_manifests
-        git clone https://github.com/phhusson/treble_manifest .repo/local_manifests  -b android-10.0
-        repo sync -c -j18 --force-sync --no-tags --no-clone-bundle
-        #
-        ## fix something I want
-        cd ${work}/device/phh/treble
-        bash generate.sh
-        cd ${work}/vendor/foss
-        bash update.sh
-        cd ${work}
-        rm -f vendor/gapps/interfaces/wifi_ext/Android.bp
-        #
-        ##fix 10.15 issue
-        cd ${work}
-        #/usr/bin/sed -i '' '14d'  system/sepolicy/tests/Android.bp
-        /usr/bin/sed -i '' '65i\'$'\n\"10\.15\"\,\n' build/soong/cc/config/x86_darwin_host.go
-        #
-        ################ end ##############
+        ./android/source/fix_soucre.sh.sh
         sudo rm -rf .repo
 
     # upload sparseimage to gdrive
@@ -109,12 +87,12 @@ jobs:
         
     - name: Check The Previous “error.log”
       run: |
-        if [ -d "${out_path}/error.log" ];then
-          ls -al ${out_path}/error*
+        if [ -d "${work}/out/error.log" ];then
+          ls -al ${work}/out/error*
           echo "old error.log:"
-          cat ${out_path}/error.log
-          sudo rm ${out_path}/error.log
-          touch ${out_path}/error.log
+          cat ${work}/out/error.log
+          sudo rm ${work}/out/error.log
+          touch ${work}/out/error.log
         fi
     
     # build android system 
@@ -138,9 +116,9 @@ jobs:
     - name: Check Current ”error.log“ Status
       id: check
       run: |
-        if [ -s ${out_path}/error.log ]; then
+        if [ -s ${work}/out/error.log ]; then
           echo Error!
-          cat ${out_path}/error.log
+          cat ${work}/out/error.log
           ./init/all_unmount_darwin.sh
           exit 2
         else
@@ -148,18 +126,26 @@ jobs:
         fi
            
     - name: Build Done!
-      if: github.event.action == 'aosp_build' && steps.check.conclusion == 'success' &&  steps.build.outcome == 'success' && steps.build.conclusion == 'success'
+      if: steps.check.conclusion == 'success' &&  steps.build.outcome == 'success' && steps.build.conclusion == 'success'
       uses: actions/upload-artifact@master
       with:
-        name: system.img
-        path: ${out_path}/target/product/${device_name}/system.img
+        name: Image
+        if-no-files-found: warn
+        path: |
+          ${{ env.work }}/out/target/product/${{ env device_name }}/system.img
+          ${{ env.work }}/out/target/product/${{ env.device_name }}/boot.img
  
     - name: Clean system environment
+      continue-on-error: true
       run: |
         ./android/init/all_unmount_darwin.sh
-           
+
+#     - name: Upload spaceimage
+#       run: |
+#         ./android/source/upload_out_image.sh
+
     - name: TimeOut - "aosp_build" continue
-      if: github.event.action == 'aosp_build' && steps.build.outcome == 'failure' && steps.build.conclusion == 'success'  &&  steps.check.conclusion == 'success'         
+      if: steps.build.outcome == 'failure' && steps.build.conclusion == 'success'  &&  steps.check.conclusion == 'success'         
       run: |
         ./android/source/upload_out_image.sh
         curl -H "Authorization: token ${GIT_ACCESS_TOKEN}"   --request POST   --data '{"event_type": "build","client_payload": {"device_name":"'${device_name}'", "build_device_tag":"'${build_device_tag}'", "repo_dispatches":"'${repo_dispatches}'", "android_source":"'${android_source}'", "android_branch":"'${android_branch}'"}}'  ${repo_dispatches}

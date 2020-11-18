@@ -10,20 +10,31 @@ build-android-actions use github actions and gdrive (enterprise) to afford your 
    only gdrive - enterprise
 
 ## Usage
-- Click the [Use this template](https://github.com/ /generate) button to create a new repository.
+- Click the [Use this template](https://github.com/ittat/build-actions/generate) button to create a new repository.
 - Add the secrets of GIT_ACCESS_TOKEN in your new repository.
 - Add rclone.conf as the secrets RCLONE to new repository.
 - Open .github/workflows/template_config.yml
 - Add device_name eg；`onyx`(oneplu x), `bacon`(oneplus one), `phhgsi_arm64_a`(phh's gsi) etc.
 - Add build_device_tag: eg: `full-onyx-eng`, `full-bacon-userdebug` etc.
 - Add repo_dispatches: `https://api.github.com/repos/(you id)/(you repo name)/dispatches`
-- Add android_source: remote soucre address `"https://android.googlesource.com/platform/manifest -b android-10.0.0_r41"`
-          
-## for example:
+- Add android_source: remote soucre address `"https://android.googlesource.com/platform/manifest"`
+- Add android_branch: eg; `"android-10.0.0_r41"`
+- Mod ./android/source/fix_soucre.sh: add certain local_manifest about your target
+
+## For example:
+
+- Step 1 - `android/source/fix_soucre.sh`
+```
+## I want to build phh's gsi ROM so add relevant local_manifests
+git clone https://github.com/phhusson/treble_manifest .repo/local_manifests  -b android-10.0
+repo sync -c -j18 --force-sync --no-tags --no-clone-bundle
+```
+- Step 2 - `.github/workflows/template_config.yml`
 ```
 env:
   device_name: phhgsi_arm64_a
   build_device_tag: treble_arm64_avN-userdebug
   repo_dispatches: "https://api.github.com/repos/ittat-store/build-android-actions/dispatches"
-  android_source: "https://android.googlesource.com/platform/manifest -b android-10.0.0_r41"
+  android_source: "https://android.googlesource.com/platform/manifest"
+  android_branch: "android-10.0.0_r41"
 ```
