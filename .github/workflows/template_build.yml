@@ -19,6 +19,7 @@ env:
   sourceimage: android
   work: /Volumes/android
   out_work: /Volumes/out
+  out_path: /Volumes/out/android
   outimage: out
   remotepath: android_${{github.event.client_payload.device_name}}
   
@@ -132,7 +133,7 @@ jobs:
         name: Image
         if-no-files-found: warn
         path: |
-          ${{ env.work }}/out/target/product/${{ env device_name }}/system.img
+          ${{ env.work }}/out/target/product/${{ env.device_name }}/system.img
           ${{ env.work }}/out/target/product/${{ env.device_name }}/boot.img
  
     - name: Clean system environment
