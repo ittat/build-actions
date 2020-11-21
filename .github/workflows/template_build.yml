@@ -56,7 +56,7 @@ jobs:
     - name: Fix source
       run: |    
         echo Fix source 
-        ./android/source/fix_soucre.sh.sh
+        ./android/source/fix_soucre.sh
         sudo rm -rf .repo
 
     # upload sparseimage to gdrive
