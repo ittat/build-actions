@@ -1,25 +1,29 @@
 # build-actions
+
 If you often need to build android source code and find that disk space is limited or the Internet environment is too poor,  
 if you are familiar with how to build android, build-android-actions can easily solve the problem.  
 
-build-android-actions uses github-action and gdrive (enterprise edition) to reduce the burden on your machine and disk space.
+build-android-actions uses github-action and gdrive (enterprise edition) to reduce the burden on your machine and disk space.  
+## WHAT YOU NEED
 
-## WHAT YOU NEED  
-
-   only gdrive - enterprise
+Only gdrive - enterprise
 
 ## Usage
-- Click the [Use this template](https://github.com/ittat/build-actions/generate) button to create a new repository.
-- Add the secrets of GIT_ACCESS_TOKEN in your new repository.
-- Add rclone.conf as the secrets RCLONE to new repository.
-- Open `.github/workflows/template_config.yml`
-- Add device_name eg；`onyx`(oneplu x), `bacon`(oneplus one), `phhgsi_arm64_a`(phh's gsi) etc.
-- Add build_device_tag: eg: `full-onyx-eng`, `full-bacon-userdebug` etc.
-- Add repo_dispatches: `https://api.github.com/repos/(you id)/(you repo name)/dispatches`
-- Add android_source: remote soucre address `"https://android.googlesource.com/platform/manifest -b android-10.0.0_r41"`
-- Mod ./android/source/fix_soucre.sh: add certain local_manifest about your target
 
-## For example:
+- Click the [fork](https://github.com/ittat/build-actions/fork) to create a new repository.
+- Add the secrets of `GIT_ACCESS_TOKEN` in your new repository.
+- Add rclone.conf as the secrets `RCLONE` to new repository.
+- Open `./android/source/fix_soucre.sh`
+   1. Add relevant local_manifest about your target [like](#for-example)
+- Open `.github/workflows/template_config.yml`
+   1. Add device_name: eg: `onyx`(oneplu x), `bacon`(oneplus one), `phhgsi_arm64_a`(phh's gsi) etc.
+   2. Add build_device_tag: eg: `full-onyx-eng`, `full-bacon-userdebug` etc.
+   3. Add repo_dispatches: `https://api.github.com/repos/(your-github-name)/(your-repo-name)/dispatches`
+   4. Add android_source: remote soucre `"https://android.googlesource.com/platform/manifest"`
+   5. Add android_branch: `"android-10.0.0_r41"`  
+NOTE!! - Github-Actions will auto trigger when you change anything in template_config.yml.
+
+## For example
 
 - Step 1 - `android/source/fix_soucre.sh`
 ```
@@ -32,8 +36,9 @@ repo sync -c -j18 --force-sync --no-tags --no-clone-bundle
 env:
   device_name: phhgsi_arm64_a
   build_device_tag: treble_arm64_avN-userdebug
-  repo_dispatches: "https://api.github.com/repos/ittat-store/build-android-actions/dispatches"
-  android_source: "https://android.googlesource.com/platform/manifest -b android-10.0.0_r41"
+  repo_dispatches: "https://api.github.com/repos/ittat/build-actions/dispatches"
+  android_source: "https://android.googlesource.com/platform/manifest"
+  android_branch: "android-10.0.0_r41"
 ```
 
 ## Qusetions?
@@ -46,4 +51,6 @@ env:
    
 #### 3. Why need GIT_ACCESS_TOKEN?
    Start a new job after timeout
-   
+
+#### 4. Have other options can replace it without gdrive?
+   No, now. I will try to do it(Github-Actions-Artifacts? onedrive? and other what you tell me possible?)
