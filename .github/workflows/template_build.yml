@@ -23,15 +23,6 @@ env:
   outimage: out
   remotepath: android_${{github.event.client_payload.device_name}}
   
-# gdrive filer 
-#   |--custom_image_name(image)
-#         |--sourceimage
-#         |--outimage
-
-# macos path
-#   |--Vol/sourceimage
-#   |--Vol/outimage
-
 
 jobs: 
   repack:
@@ -66,10 +57,10 @@ jobs:
         ./android/source/compress_sourceimage.sh     
         ./android/source/upload_image.sh
         
-    - name: Send "aosp_build" WebHook          
+    - name: Start build job          
       run: |
-        curl -H "Authorization: token ${GIT_ACCESS_TOKEN}"   --request POST   --data '{"event_type": "build","client_payload": {"device_name":"'${device_name}'", "build_device_tag":"'${build_device_tag}'", "repo_dispatches":"'${repo_dispatches}'", "android_source":"'${android_source}'", "android_branch":"'${android_branch}'"}}'  ${repo_dispatches}
-       
+        ./android/init/webhook.sh build
+
   build:
     if: github.event.action == 'build'
     runs-on: macos-latest
@@ -149,5 +140,4 @@ jobs:
       if: steps.build.outcome == 'failure' && steps.build.conclusion == 'success'  &&  steps.check.conclusion == 'success'         
       run: |
         ./android/source/upload_out_image.sh
-        curl -H "Authorization: token ${GIT_ACCESS_TOKEN}"   --request POST   --data '{"event_type": "build","client_payload": {"device_name":"'${device_name}'", "build_device_tag":"'${build_device_tag}'", "repo_dispatches":"'${repo_dispatches}'", "android_source":"'${android_source}'", "android_branch":"'${android_branch}'"}}'  ${repo_dispatches}
- 
+        ./android/init/webhook.sh build

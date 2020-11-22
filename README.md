@@ -21,7 +21,7 @@ Only gdrive - enterprise
    3. Add repo_dispatches: `https://api.github.com/repos/(your-github-name)/(your-repo-name)/dispatches`
    4. Add android_source: remote soucre `"https://android.googlesource.com/platform/manifest"`
    5. Add android_branch: `"android-10.0.0_r41"`  
-NOTE!! - Github-Actions will auto trigger when you change anything in template_config.yml.
+   6. NOTE: If everything done, actions will auto tagger after switch `ready` to `true` from `false`.
 
 ## For example
 

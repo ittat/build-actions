@@ -23,13 +23,16 @@ env:
   repo_dispatches: "https://api.github.com/repos/ittat/build-actions/dispatches"
   android_source: "https://android.googlesource.com/platform/manifest"
   android_branch: "android-10.0.0_r41"
+  ready: "false"
 
 jobs: 
   config:
     runs-on: ubuntu-latest
     steps:
-    - name: WebHook          
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Action   
+      if: env.ready == 'true'      
       run: |
-        curl -H "Authorization: token ${GIT_ACCESS_TOKEN}"   --request POST   --data '{"event_type": "repack","client_payload": {"device_name":"'${device_name}'", "build_device_tag":"'${build_device_tag}'", "repo_dispatches":"'${repo_dispatches}'", "android_source":"'${android_source}'", "android_branch":"'${android_branch}'"}}'  ${repo_dispatches}
-        #curl -H "Authorization: token ${GIT_ACCESS_TOKEN}"   --request POST   --data '{"event_type": "build",  "client_payload": {"device_name":"'${device_name}'", "build_device_tag":"'${build_device_tag}'", "repo_dispatches":"'${repo_dispatches}'", "android_source":"'${android_source}'", "android_branch":"'${android_branch}'"}}'  ${repo_dispatches}
-     
+        ./android/init/webhook.sh repack     
