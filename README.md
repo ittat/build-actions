@@ -12,7 +12,16 @@ Only gdrive - enterprise
 
 - Click the [fork](https://github.com/ittat/build-actions/fork) to create a new repository.
 - Add the secrets of `GIT_ACCESS_TOKEN` in your new repository.
-- Add rclone.conf as the secrets `RCLONE` to new repository.
+- Add rclone.conf as the secrets `RCLONE` to new repository and set gdrive's name as `itd`. For example：
+```
+[itd]
+type = drive
+client_id = ...
+client_secret = ...
+scope = drive
+token = {"access_token":"...","token_type":"...","refresh_token":"...","expiry":"..."}
+team_drive = ...
+```
 - Open `./android/source/fix_soucre.sh`
    1. Add relevant local_manifest about your target [like](#for-example)
 - Open `.github/workflows/template_config.yml`
