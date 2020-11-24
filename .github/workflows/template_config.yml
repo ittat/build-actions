@@ -1,10 +1,5 @@
 name: template_config
 on: 
-#   push:
-#     paths: 
-#       - ".github/workflows/template_config.yml"
-#     branches: 
-#       - android-build
   workflow_dispatch:
 
 # NEED  
@@ -24,7 +19,6 @@ env:
   repo_dispatches: "https://api.github.com/repos/ittat/build-actions/dispatches"
   android_source: "https://android.googlesource.com/platform/manifest"
   android_branch: "android-10.0.0_r41"
-  ready: "false"
 
 jobs: 
   config:
@@ -33,7 +27,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v1
 
-    - name: Action   
-      if: env.ready == 'true'      
+    - name: Action        
       run: |
         ./android/init/webhook.sh repack     
