@@ -44,7 +44,7 @@ Only gdrive - enterprise
      android_source: "https://android.googlesource.com/platform/manifest"
      android_branch: "android-10.0.0_r41"
    ```  
-   NOTE: If everything done, actions will auto tagger after switch `ready` to `true` from `false`.
+   NOTE: If everything done, Clike `actions`-`template_config`-`run workflow` to tagger flow.
 
 
 ## Qusetions?
