@@ -13,7 +13,8 @@ set -e
         
       
         . "${work}/B2G/.config"
-        export GONK_PRODUCT_NAME=${TARGET_NAME}
+        #export GONK_PRODUCT_NAME=${TARGET_NAME}
+        export GONK_PRODUCT_NAME="generic_arm64"
         echo GONK_PRODUCT_NAME -- ${GONK_PRODUCT_NAME}
         
         if [ "$device_name" == "onyx" ]; then
