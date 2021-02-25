@@ -1,0 +1,143 @@
+name: template_build
+on: 
+  repository_dispatch:
+      types: 
+      - repack
+      - build
+      
+env:
+  RCLONE: ${{secrets.RCLONE}}
+  GIT_ACCESS_TOKEN: ${{secrets.GIT_ACCESS_TOKEN}}
+  device_name: ${{github.event.client_payload.device_name}}
+  build_device_tag: ${{github.event.client_payload.build_device_tag}}
+  repo_dispatches: ${{github.event.client_payload.repo_dispatches}}
+  android_source: ${{github.event.client_payload.android_source}}
+  android_branch: ${{github.event.client_payload.android_branch}}
+
+  # DON'T CHANGE IT 
+  image: android
+  sourceimage: android
+  work: /Volumes/android
+  out_work: /Volumes/out
+  out_path: /Volumes/out/android
+  outimage: out
+  remotepath: android_${{github.event.client_payload.device_name}}
+  
+
+jobs: 
+  repack:
+    if: github.event.action == 'repack'
+    runs-on: macos-latest
+    timeout-minutes: 360
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Initialization system environment
+      run: |
+        ./android/init/all_unmount_darwin.sh
+        ./android/init/clean_space_darwin.sh
+        ./android/init/env_darwin.sh
+        ./android/source/create_sparseimage.sh
+    
+    - name: Fetch source
+      run: |    
+        ./android/source/repo_source.sh
+
+    - name: Fix source
+      run: |    
+        echo Fix source 
+        ./android/source/fix_soucre.sh
+        sudo rm -rf .repo
+
+    # upload sparseimage to gdrive
+    - name: Upload Source 
+      run: |
+        ./android/init/all_unmount_darwin.sh
+        ./android/source/compress_sourceimage.sh     
+        ./android/source/upload_image.sh
+        
+    - name: Start build job          
+      run: |
+        ./android/init/webhook.sh build
+
+  build:
+    if: github.event.action == 'build'
+    runs-on: macos-latest
+    timeout-minutes: 360
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1   
+      
+    - name: Initialization system environment
+      run: |
+        ./android/init/all_unmount_darwin.sh
+        ./android/init/clean_space_darwin.sh
+        ./android/init/env_darwin.sh
+        ./android/source/download_source_from_gdrive.sh
+        df -h
+        
+    - name: Check The Previous “error.log”
+      run: |
+        if [ -d "${work}/out/error.log" ];then
+          ls -al ${work}/out/error*
+          echo "old error.log:"
+          cat ${work}/out/error.log
+          sudo rm ${work}/out/error.log
+          touch ${work}/out/error.log
+        fi
+    
+    # build android system 
+    - name: Build Source
+      continue-on-error: true
+      id: build
+      run: |
+        df -h
+        export CCACHE_DIR=~/.ccache
+        /usr/local/bin/ccache  -M 20G
+        /usr/local/bin/ccache -s
+        export USE_CCACHE=1
+        #export OUT_DIR_COMMON_BASE=${out_work}
+        cd ${work}
+        . build/envsetup.sh
+        lunch ${build_device_tag}
+        gtimeout 245m  make -j16 systemimage
+        df -h
+        
+
+    - name: Check Current ”error.log“ Status
+      id: check
+      run: |
+        if [ -s ${work}/out/error.log ]; then
+          echo Error!
+          cat ${work}/out/error.log
+          ./init/all_unmount_darwin.sh
+          exit 2
+        else
+          exit 0
+        fi
+           
+    - name: Build Done!
+      if: steps.check.conclusion == 'success' &&  steps.build.outcome == 'success' && steps.build.conclusion == 'success'
+      uses: actions/upload-artifact@master
+      with:
+        name: Image
+        if-no-files-found: warn
+        path: |
+          ${{ env.work }}/out/target/product/${{ env.device_name }}/system.img
+          ${{ env.work }}/out/target/product/${{ env.device_name }}/boot.img
+ 
+    - name: Clean system environment
+      continue-on-error: true
+      run: |
+        ./android/init/all_unmount_darwin.sh
+
+#     - name: Upload spaceimage
+#       run: |
+#         ./android/source/upload_out_image.sh
+
+    - name: TimeOut - "aosp_build" continue
+      if: steps.build.outcome == 'failure' && steps.build.conclusion == 'success'  &&  steps.check.conclusion == 'success'         
+      run: |
+        ./android/source/upload_out_image.sh
+        ./android/init/webhook.sh build

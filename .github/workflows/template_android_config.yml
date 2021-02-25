@@ -1,0 +1,38 @@
+name: template_config
+on: 
+  push:
+    paths: 
+      - ".github/workflows/template_config.yml"
+    branches: 
+      - android-build
+
+# NEED  
+# 1. secrets.GIT_ACCESS_TOKEN
+# 2. secrets.RCLONE
+# 3. device_name eg；onyx(oneplu x), bacon(oneplus one), phhgsi_arm64_a(phh's gsi) etc.
+# 4. build_device_tag: eg: full-onyx-eng, full-bacon-userdebug etc.
+# 5. repo_dispatches: https://api.github.com/repos/(you id)/(you repo name)/dispatches
+# 6. android_source: 
+#         remote soucre address: 
+#          https://android.googlesource.com/platform/manifest -b android-10.0.0_r41
+# for example:
+env:
+  GIT_ACCESS_TOKEN: ${{secrets.GIT_ACCESS_TOKEN}}
+  device_name: phhgsi_arm64_a
+  build_device_tag: treble_arm64_avN-userdebug
+  repo_dispatches: "https://api.github.com/repos/ittat/build-actions/dispatches"
+  android_source: "https://android.googlesource.com/platform/manifest"
+  android_branch: "android-10.0.0_r41"
+  ready: "false"
+
+jobs: 
+  config:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Action   
+      if: env.ready == 'true'      
+      run: |
+        ./android/init/webhook.sh repack     

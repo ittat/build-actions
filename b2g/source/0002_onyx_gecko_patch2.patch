@@ -1,0 +1,30 @@
+From 15b013f171f35e05fde0b4a8bde58648b8f040f6 Mon Sep 17 00:00:00 2001
+From: ittat <ittat@live.com>
+Date: Sun, 21 Feb 2021 14:54:10 +0800
+Subject: [PATCH] Update HwcHAL.cpp
+
+---
+ widget/gonk/hwchal/HwcHAL.cpp | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/widget/gonk/hwchal/HwcHAL.cpp b/widget/gonk/hwchal/HwcHAL.cpp
+index 5021981c4806c..d8bd931b45d14 100644
+--- a/widget/gonk/hwchal/HwcHAL.cpp
++++ b/widget/gonk/hwchal/HwcHAL.cpp
+@@ -108,7 +108,8 @@ UniquePtr<HwcHALBase> HwcHALBase::CreateHwcHAL() {
+ 
+ extern "C" MOZ_EXPORT __attribute__((weak)) HWC2::Display* hwc2_getDisplayById(
+     HWC2::Device* p, hwc2_display_t id) {
+-  return p->getDisplayById(id);
++    ALOGI("##ittat## ----------> HW2_libcarthage get a response: display %" PRIu64, id);
++    return p->getDisplayById(1);
+ }
+ 
+ extern "C" MOZ_EXPORT __attribute__((weak)) void hwc2_registerCallback(
+@@ -124,4 +125,4 @@ extern "C" MOZ_EXPORT __attribute__((weak)) HWC2::Error hwc2_setVsyncEnabled(
+ extern "C" MOZ_EXPORT __attribute__((weak)) void hwc2_onHotplug(
+     HWC2::Device* p, hwc2_display_t displayId, HWC2::Connection connection) {
+   return p->onHotplug(displayId, connection);
+-}
+\ No newline at end of file
++}

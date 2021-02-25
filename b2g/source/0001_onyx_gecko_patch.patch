@@ -1,0 +1,45 @@
+From 8c69882de236eddee83520d7d9dc1f636d86a319 Mon Sep 17 00:00:00 2001
+From: ittat <ittat@live.com>
+Date: Sun, 21 Feb 2021 14:48:51 +0800
+Subject: [PATCH] Display work for onyx part1
+
+---
+ widget/gonk/libdisplay/GonkDisplay.cpp | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/widget/gonk/libdisplay/GonkDisplay.cpp b/widget/gonk/libdisplay/GonkDisplay.cpp
+index bfebb87c02459..2a104d716ce4e 100644
+--- a/widget/gonk/libdisplay/GonkDisplay.cpp
++++ b/widget/gonk/libdisplay/GonkDisplay.cpp
+@@ -151,11 +151,11 @@ GonkDisplayP::GonkDisplayP()
+   mHwc = std::make_unique<HWC2::Device>(
+       std::make_unique<Hwc2::impl::Composer>(serviceName));
+   assert(mHwc);
+-  mHwc->registerCallback(new HWComposerCallback(mHwc.get()), 0);
++  mHwc->registerCallback(1);
+ 
+   std::unique_lock<std::mutex> lock(hotplugMutex);
+   HWC2::Display* hwcDisplay;
+-  while (!(hwcDisplay = mHwc->getDisplayById(HWC_DISPLAY_PRIMARY))) {
++  while (!(hwcDisplay = mHwc->getDisplayById(1))) {
+     /* Wait at most 5s for hotplug events */
+     hotplugCv.wait_for(lock, std::chrono::seconds(5));
+   }
+@@ -186,7 +186,7 @@ GonkDisplayP::GonkDisplayP()
+     /* The emulator actually reports RGBA_8888, but EGL doesn't return
+      * any matching configuration. We force RGBX here to fix it. */
+     /*TODO: need to discuss with vendor to check this format issue.*/
+-    dispData.mSurfaceformat = HAL_PIXEL_FORMAT_RGB_565;
++    dispData.mSurfaceformat = HAL_PIXEL_FORMAT_RGBA_8888;
+   }
+   (void)hwcDisplay->createLayer(&mlayer);
+ 
+@@ -200,7 +200,7 @@ GonkDisplayP::GonkDisplayP()
+   (void)mPowerModule;
+ 
+   ALOGI("created native window\n");
+-  native_gralloc_initialize(1);
++  native_gralloc_initialize(0);
+ 
+   mPower = IPower::getService();
+   if (mPower == nullptr) {
