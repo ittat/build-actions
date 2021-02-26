@@ -30,6 +30,7 @@ env:
   work: /Volumes/b2g_gsi
   out_work: /Volumes/out
   remotepath: b2g_gsi_${{github.event.client_payload.device_name}}
+  actions_branch: b2g_gsi
   
 
 jobs: 
@@ -41,7 +42,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        ref: android-build
+        ref: ${{ env.actions_branch }}
 
     - name: Clean system environment
       continue-on-error: true
@@ -84,7 +85,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        ref: android-build
+        ref: ${{ env.actions_branch }}
           
     - name: Initialization system environment
       run: |
@@ -218,7 +219,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        ref: android-build
+        ref: ${{ env.actions_branch }}
         
     - name: Initialization system environment
       run: |
@@ -302,7 +303,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        ref: android-build
+        ref: ${{ env.actions_branch }}
 
     - name: Initialization system environment
       run: |
