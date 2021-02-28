@@ -13,6 +13,8 @@ set -e
         export PREFERRED_B2G=${work}/b2g-dummy.tar.bz2
         export USE_PREBUILT_B2G=1
         export SKIP_ABI_CHECKS=true
+        #TODO
+        PATH=~/.mozbuild/node/lib/node_modules/.bin/:$PATH ./build.sh binder_b2g_stub
         gtimeout 245m ./build.sh -j16 systemimage
         #export SKIP_ABI_CHECKS=true
         #gtimeout 245m  ./build-gsi.sh ${build_device_tag} systemimage
