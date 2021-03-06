@@ -6,5 +6,5 @@ set -e
         cd ./B2G
         echo Download ...
         #TODO
-        GITREPO=https://github.com/b2g-gsi/manifests BRANCH=gsi_q  REPO_INIT_FLAGS="--depth=1" REPO_SYNC_FLAGS=" -j128 --force-sync --current-branch --no-tags --no-clone-bundle --optimized-fetch --prune" ./config.sh aosp_arm64
+        GITREPO=https://github.com/b2g-gsi/manifests BRANCH=${b2g_branch}  REPO_INIT_FLAGS="--depth=1" REPO_SYNC_FLAGS=" -j128 --force-sync --current-branch --no-tags --no-clone-bundle --optimized-fetch --prune" ./config.sh ${build_device_tag}
         df -h
