@@ -16,12 +16,13 @@ on:
 # for example:
 env:
   GIT_ACCESS_TOKEN: ${{secrets.GIT_ACCESS_TOKEN}}
-  device_name: aosp_arm64
+  device_name: phhgsi_arm64_ab
   repo_dispatches: "https://api.github.com/repos/b2g-gsi/build-actions/dispatches"
   b2g_source: "https://github.com/b2g-gsi/B2G"
-  b2g_branch: "gsi_q"
-  build_device_tag: aosp_arm64
+  b2g_branch: "ittat-patch-gsi"
+  build_device_tag: gsi_arm64_ab
   device_arch: aarch64-linux-android
+  actions_branch: b2g_gsi
 #onyx
 #phhgsi_arm64_a  
 #phhgsi_arm64_ab
