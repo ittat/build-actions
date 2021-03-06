@@ -38,5 +38,5 @@ jobs:
 
     - name: Action        
       run: |
-        ./b2g/init/webhook.sh b2g_aosp_build
+        ./b2g/init/webhook.sh b2g_repack
         #b2g_repack    b2g_aosp_build b2g_gecko_build b2g_api_daemon_build
