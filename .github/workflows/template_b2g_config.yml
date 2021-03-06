@@ -22,6 +22,7 @@ env:
   b2g_branch: "ittat-patch-gsi"
   build_device_tag: gsi_arm64_ab
   device_arch: aarch64-linux-android
+  actions_branch: b2g_gsi
 #onyx
 #phhgsi_arm64_a  
 #phhgsi_arm64_ab
