@@ -30,7 +30,7 @@ env:
   work: /Volumes/b2g_gsi
   out_work: /Volumes/out
   remotepath: b2g_gsi_${{github.event.client_payload.device_name}}
-  actions_branch: b2g_gsi
+  actions_branch: ${{github.event.client_payload.actions_branch}}
   
 
 jobs: 
