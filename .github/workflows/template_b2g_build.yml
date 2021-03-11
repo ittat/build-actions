@@ -105,16 +105,6 @@ jobs:
          curl https://packages.preprod.kaiostech.com/ndk/v4/mozbuild.tar.bz2 -o mozbuild.tar.bz2
          tar -xvf mozbuild.tar.bz2
          sudo rm mozbuild.tar.bz2
-        
-         #tmp
-         cd ${work}/B2G/gonk-misc
-         sudo rm -r api-daemon
-         git clone https://github.com/b2g-gsi/api-daemon -b without-api-daemon
-         #TODO
-         cd ~
-         git clone https://github.com/b2g-gsi/platform_build -b gsi_q --depth=1
-         rm ${work}/B2G/build/make/target/product/aosp_arm64.mk
-         cp ~/platform_build/target/product/aosp_arm64.mk ${work}/B2G/build/make/target/product/
 
     - name: Check The Previous “error.log”
       run: |
@@ -135,7 +125,6 @@ jobs:
       id: build
       run: |
         df -h
-        
         ./b2g/build/build_without_gecko.sh
         
 
@@ -196,11 +185,6 @@ jobs:
       run: |
         ./b2g/init/webhook.sh b2g_gecko_build
 
-#     - name: release WebHook
-#       if: github.event.action == 'b2g_build' 
-#       run: |
-#        curl -H "Authorization: token ${{secrets.GIT_ACCESS_TOKEN}}"   --request POST   --data '{"event_type": "release","client_payload": {"image":"'${image}'", "gecko_version":"'${gecko_version}'", "device_name":"'${device_name}'","device_arch":"'${device_arch}'","kernel":"'${kernel}'"}}'   https://api.github.com/repos/ittat/SuperBot/dispatches
- 
     - name: Update Build Source
       if: steps.check.conclusion == 'success' &&  github.event.action == 'b2g_aosp_build' 
       run: |
@@ -257,7 +241,7 @@ jobs:
         ./mach bootstrap --no-interactive --application-choice 'GeckoView/Firefox for Android'
         df -h
        
-    - name: Build Gecko for gsi
+    - name: Build Gecko
       run: |
           ./b2g/build/build_gecko.sh
       
@@ -274,7 +258,6 @@ jobs:
           TARGET_ARCH=arm
           ARCH_ABI="androideabi"
         fi
-        #echo "::set-env name=B2G_OUT::b2g-${version}.en-US.linux-${ARCH_ABI}-${TARGET_ARCH}.tar.bz2"
         echo "gecko_version=b2g-${version}.en-US.linux-${ARCH_ABI}-${TARGET_ARCH}.tar.bz2" >> $GITHUB_ENV
 
 
@@ -325,9 +308,10 @@ jobs:
         cd ~
         git clone https://github.com/kaiostech/api-daemon 
         #--depth=1
-        cd api-daemon
+        #cd api-daemon
         #git checkout 405f8d72005b0d753ea3a181246d4f5dbf129669 -b test
         ls -al
+        
     - name: build Source
       run: |
         ####
@@ -336,9 +320,6 @@ jobs:
         export GONK_DIR=~/.mozbuild/api-sysroot
         export GONK_PRODUCT=${device_name}
         cd ~/api-daemon
-        ### temp
-        mkdir -p ./target/aarch64-linux-android/release/symbols
-        ###
         ./update-prebuilts.sh
         
     - name: zip Artifact
