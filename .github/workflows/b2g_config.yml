@@ -1,5 +1,4 @@
-
-name: template_b2g_config
+name: b2g_config
 on: 
   workflow_dispatch:
 
