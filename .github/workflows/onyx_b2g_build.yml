@@ -237,9 +237,9 @@ jobs:
         tar -xvf mozbuild.tar.bz2
         sudo rm mozbuild.tar.bz2
         cd ~
-        git clone https://github.com/kaiostech/gecko-b2g -b gonk --depth=1
+        #git clone https://github.com/kaiostech/gecko-b2g -b gonk --depth=1
         #for onyx
-        #git clone https://github.com/ittat-store/gecko-b2g -b gonk --depth=1
+        git clone https://github.com/ittat-store/gecko-b2g -b gonk --depth=1
         df -h
         
     - name: Bootstrap Gecko
