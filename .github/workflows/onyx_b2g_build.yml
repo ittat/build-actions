@@ -252,7 +252,8 @@ jobs:
         export SHELL=/bin/bash
         sudo apt update
         export LOCAL_NDK_BASE_URL='ftp://ftp.kaiostech.com/ndk/android-ndk'
-        ./mach bootstrap --no-interactive --application-choice 'GeckoView/Firefox for Android'
+        #./mach bootstrap --no-interactive --application-choice 'GeckoView/Firefox for Android'
+        ./mach python python/mozboot/mozboot/android.py --ndk-only --no-interactive
         df -h
        
     - name: Build Gecko
