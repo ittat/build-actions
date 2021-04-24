@@ -40,7 +40,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        ref: onyx-b2g-build
+        ref: onyx_b2g-build
 
     - name: Clean system environment
       continue-on-error: true
@@ -83,7 +83,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        ref: onyx-b2g-build
+        ref: onyx_b2g-build
           
     - name: Initialization system environment
       run: |
@@ -217,7 +217,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        ref: onyx-b2g-build
+        ref: onyx_b2g-build
         
     - name: Initialization system environment
       run: |
@@ -306,7 +306,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        ref: onyx-b2g-build
+        ref: onyx_b2g-build
 
     - name: Initialization system environment
       run: |
