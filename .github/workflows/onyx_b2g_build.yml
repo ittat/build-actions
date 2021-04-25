@@ -246,7 +246,7 @@ jobs:
         #for onyx
         #git clone https://github.com/ittat-store/gecko-b2g -b gonk --depth=1
         #for tablet-wip
-        git clone https://github.com/ittat/gecko-b2g-1 -b tablet-wp --depth=1
+        git clone https://github.com/ittat/gecko-b2g-1 -b tablet-wp-onyx --depth=1
         mv gecko-b2g-1 gecko-b2g
         df -h
         
