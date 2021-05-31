@@ -244,10 +244,8 @@ jobs:
         cd ~
         #git clone https://github.com/kaiostech/gecko-b2g -b gonk --depth=1
         #for onyx
-        #git clone https://github.com/ittat-store/gecko-b2g -b gonk --depth=1
-        #for tablet-wip
-        git clone https://github.com/ittat/gecko-b2g-1 -b tablet-wp-onyx --depth=1
-        mv gecko-b2g-1 gecko-b2g
+        git clone https://github.com/OnePlus-onyx/gecko-b2g-onyx -b onyx --depth=1
+        mv gecko-b2g-onyx gecko-b2g
         df -h
         
     - name: Bootstrap Gecko
