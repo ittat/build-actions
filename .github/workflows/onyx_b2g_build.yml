@@ -40,7 +40,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        ref: onyx-b2g-build
+        ref: onyx_b2g-build
 
     - name: Clean system environment
       continue-on-error: true
@@ -83,7 +83,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        ref: onyx-b2g-build
+        ref: onyx_b2g-build
           
     - name: Initialization system environment
       run: |
@@ -158,18 +158,23 @@ jobs:
       id: sysroot
       if: github.event.action == 'b2g_aosp_build' && steps.check.conclusion == 'success' &&  steps.build.outcome == 'success' && steps.build.conclusion == 'success'
       run: |
+        pip3 install zstandard
+        pip install zstandard
+        
+        if [ -s ${work}/B2G/create-b2g-sysroot.sh ]; then
+            echo clear api_sysroot.sh　and create-b2g-sysroot.sh
+            rm ${work}/B2G/create-b2g-sysroot.sh
+            rm ${work}/B2G/api_sysroot.sh
+        fi
+        echo ##############################################
+        cat ./b2g/build/create-b2g-sysroot.sh
+        echo ##############################################
         chmod +x ./b2g/build/create-b2g-sysroot.sh
         chmod +x ./b2g/build/api_sysroot.sh
         cp ./b2g/build/create-b2g-sysroot.sh ${work}/B2G
         cp ./b2g/build/api_sysroot.sh ${work}/B2G
-        pip3 install zstandard
-        pip install zstandard
-        
-        echo repack_b2g-sysroot
         ./b2g/build/repack_b2g-sysroot.sh
-        echo repack_api-sysroot
         ./b2g/build/repack_api-sysroot.sh
-        echo Upload b2g-sysroot and api-sysroot
         ./b2g/source/upload_sysroot.sh
         
     - name: Updoal systemimage
@@ -212,7 +217,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        ref: onyx-b2g-build
+        ref: onyx_b2g-build
         
     - name: Initialization system environment
       run: |
@@ -239,7 +244,8 @@ jobs:
         cd ~
         #git clone https://github.com/kaiostech/gecko-b2g -b gonk --depth=1
         #for onyx
-        git clone https://github.com/ittat-store/gecko-b2g -b gonk --depth=1
+        git clone https://github.com/OnePlus-onyx/gecko-b2g-onyx -b onyx --depth=1
+        mv gecko-b2g-onyx gecko-b2g
         df -h
         
     - name: Bootstrap Gecko
@@ -249,7 +255,7 @@ jobs:
         export SHELL=/bin/bash
         sudo apt update
         export LOCAL_NDK_BASE_URL='ftp://ftp.kaiostech.com/ndk/android-ndk'
-        ./mach bootstrap --no-interactive --application-choice 'GeckoView/Firefox for Android'
+        ./mach bootstrap --application-choice 'GeckoView/Firefox for Android'
         df -h
        
     - name: Build Gecko
@@ -298,7 +304,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        ref: onyx-b2g-build
+        ref: onyx_b2g-build
 
     - name: Initialization system environment
       run: |
