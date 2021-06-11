@@ -16,4 +16,3 @@ done
 #fi
 #rm ${sourceimage}.dmg.sparseimage*
 #rm ${outimage}.dmg.sparseimage*
-df -
