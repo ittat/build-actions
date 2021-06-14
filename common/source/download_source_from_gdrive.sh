@@ -20,8 +20,11 @@ if [ -d "${source_path}/out" ];then
 fi
 hdiutil attach /Users/runner/${outimage}.dmg.sparseimage -mountpoint  ${out_work}
 ##TODO
-  ls ${out_work}
-   mv ${out_work}/B2G/* ${out_work}
+#if [ -d "${source_path}/out" ];then
+#  sudo rm -r ${source_path}/out
+#fi
+#  ls ${out_work}
+#   mv ${out_work}/B2G/* ${out_work}
 sudo ln -s  ${out_work} ${source_path}/out 
 ls -al ${out_work}
 df
