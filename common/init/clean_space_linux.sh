@@ -13,4 +13,3 @@ sudo rm -rf /etc/mysql
 echo "Removing large directories"
 # deleting 15GB
 rm -rf /usr/share/dotnet/
-df -
