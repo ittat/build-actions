@@ -8,4 +8,4 @@ while [ -d "${out_work}" ] ;do
 done
 while [ -d "${work}" ] ;do
       hdiutil detach "${work}" -force
-don
+done
