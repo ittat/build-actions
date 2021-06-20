@@ -1,9 +1,7 @@
-name: b2g_config
+name: b2g-gsi-config
 on: 
   workflow_dispatch: 
-      types: 
-      - b2g_gsi
-
+  
 # NEED  
 # 1. secrets.GIT_ACCESS_TOKEN
 # 2. secrets.RCLONE
@@ -40,5 +38,5 @@ jobs:
 
     - name: Action        
       run: |
-        ./gsi/init/webhook.sh b2g_repack
-        #b2g_repack    b2g_aosp_build b2g_gecko_build b2g_api_daemon_build
+        ./gsi/init/webhook.sh gsi_b2g_repack
+        #gsi_b2g_repack gsi_aosp_build gsi_gecko_build gsi_b2g_build gsi_api_daemon_build
