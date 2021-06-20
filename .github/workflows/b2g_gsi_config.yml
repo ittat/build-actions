@@ -13,7 +13,7 @@ on:
 # 6. b2g_source: 
 #         remote soucre address
 # for example:
-env:
+env: 
   GIT_ACCESS_TOKEN: ${{secrets.GIT_ACCESS_TOKEN}}
   device_name: phhgsi_arm64_ab
   repo_dispatches: "https://api.github.com/repos/b2g-gsi/build-actions/dispatches"

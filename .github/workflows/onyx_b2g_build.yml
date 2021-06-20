@@ -180,7 +180,7 @@ jobs:
 
  
     - name: Update Build Source
-      if: steps.check.conclusion == 'success' &&  github.event.action == 'b2g_aosp_build' 
+      if: steps.check.conclusion == 'success' &&  github.event.action == 'onyx_aosp_build' 
       run: |
         ./common/source/upload_out_image.sh
             
