@@ -40,7 +40,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        ref: onyx_b2g-build
+        ref: ${{ env.actions_branch }}
 
     - name: Clean system environment
       continue-on-error: true
@@ -83,7 +83,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        ref: onyx_b2g-build
+        ref: ${{ env.actions_branch }}
           
     - name: Initialization system environment
       run: |
@@ -197,7 +197,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        ref: onyx_b2g-build
+        ref: ${{ env.actions_branch }}
         
     - name: Initialization system environment
       run: |
@@ -285,8 +285,8 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        ref: onyx_b2g-build
-
+        ref: ${{ env.actions_branch }}
+        
     - name: Initialization system environment
       run: |
         df -h

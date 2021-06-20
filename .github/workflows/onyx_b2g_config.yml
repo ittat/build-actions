@@ -21,6 +21,7 @@ env:
   b2g_branch: "gsi"
   build_device_tag: onyx
   device_arch: armv7-linux-androideabi
+  actions_branch: b2g_gsi
 
 jobs: 
   config:
