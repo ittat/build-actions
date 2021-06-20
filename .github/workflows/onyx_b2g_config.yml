@@ -16,7 +16,7 @@ on:
 env:
   GIT_ACCESS_TOKEN: ${{secrets.GIT_ACCESS_TOKEN}}
   device_name: onyx
-  repo_dispatches: "https://api.github.com/repos/OnePlus-onyx/build-actions/dispatches"
+  repo_dispatches: "https://api.github.com/repos/b2g-gsi/build-actions/dispatches"
   b2g_source: "https://github.com/b2gos/B2G"
   b2g_branch: "gsi"
   build_device_tag: onyx
