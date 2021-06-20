@@ -8,7 +8,7 @@ cd ~
 rclone copy  itd:ci/${remotepath}/b2g-sysroot.tar.zst ./
 tar -C "$HOME/.mozbuild" -I zstd -x -a -f b2g-sysroot.tar.zst
 
-mkdir ~/objdir-gsi-gecko
+mkdir ~/objdir-gecko
 
 sudo rm b2g-sysroot.tar.zst
 
@@ -25,11 +25,11 @@ else
 fi
 
 export GONK_PRODUCT_NAME=${device_name}
-export GECKO_OBJDIR=${HOME}/objdir-gsi-gecko
+export GECKO_OBJDIR=${HOME}/objdir-gecko
 export PLATFORM_VERSION=29
 export TARGET_CPU_VARIANT=generic
 export MOZ_DISABLE_LTO=1
-./build-gsi-b2g.sh
-./build-gsi-b2g.sh package
+./build-gecko-srcipt.sh
+./build-gecko-srcipt.sh package
 df -h
 ls ${GECKO_OBJDIR}

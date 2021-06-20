@@ -1,12 +1,12 @@
-name: b2g-ci
+name: b2g-gsi-ci
 on: 
   repository_dispatch:
       types: 
-      - b2g_repack
-      - b2g_aosp_build
-      - b2g_gecko_build
-      - b2g_b2g_build
-      - b2g_api_daemon_build
+      - gsi_b2g_repack
+      - gsi_aosp_build
+      - gsi_gecko_build
+      - gsi_b2g_build
+      - gsi_api_daemon_build
       
 env:
   RCLONE: ${{secrets.RCLONE}}
@@ -34,7 +34,7 @@ env:
 
 jobs: 
   repack_aosp:        
-    if: github.event.action == 'b2g_repack'
+    if: github.event.action == 'gsi_b2g_repack'
     runs-on: macos-latest
     timeout-minutes: 360
     steps:
@@ -74,10 +74,10 @@ jobs:
         
     - name: Start build job          
       run: |
-        ./gsi/init/webhook.sh b2g_aosp_build
+        ./gsi/init/webhook.sh gsi_aosp_build
 
   aosp_build:
-    if: github.event.action == 'b2g_aosp_build' || github.event.action == 'b2g_b2g_build' 
+    if: github.event.action == 'gsi_aosp_build' || github.event.action == 'gsi_b2g_build' 
     runs-on: macos-latest
     timeout-minutes: 360
     steps:
@@ -164,7 +164,7 @@ jobs:
         ./common/source/upload_sysroot.sh
         
     - name: Updoal systemimage
-      if:  github.event.action == 'b2g_b2g_build' 
+      if:  github.event.action == 'gsi_b2g_build' 
       continue-on-error: true
       run: |
          ./common/source/upload_systemimage.sh
@@ -175,9 +175,9 @@ jobs:
         ./common/init/all_unmount_darwin.sh
         
     - name: Send "build_gecko" WebHook
-      if: github.event.action == 'b2g_aosp_build' && steps.check.conclusion == 'success' &&  steps.build.outcome == 'success' && steps.build.conclusion == 'success'
+      if: github.event.action == 'gsi_aosp_build' && steps.check.conclusion == 'success' &&  steps.build.outcome == 'success' && steps.build.conclusion == 'success'
       run: |
-        ./gsi/init/webhook.sh b2g_gecko_build
+        ./gsi/init/webhook.sh gsi_gecko_build
 
     - name: Update Build Source
       if: steps.check.conclusion == 'success' &&  github.event.action == 'b2g_aosp_build' 
@@ -185,12 +185,12 @@ jobs:
         ./common/source/upload_out_image.sh
             
     - name: Send "aosp_build" WebHook Again
-      if: github.event.action == 'b2g_aosp_build' && steps.build.outcome == 'failure' && steps.build.conclusion == 'success'  &&  steps.check.conclusion == 'success'         
+      if: github.event.action == 'gsi_aosp_build' && steps.build.outcome == 'failure' && steps.build.conclusion == 'success'  &&  steps.check.conclusion == 'success'         
       run: |
-        ./gsi/init/webhook.sh b2g_aosp_build
+        ./gsi/init/webhook.sh gsi_aosp_build
 
   gecko_build:
-    if: github.event.action == 'b2g_gecko_build' || github.event_name == 'schedule' 
+    if: github.event.action == 'gsi_gecko_build' || github.event_name == 'schedule' 
     runs-on: ubuntu-18.04
     timeout-minutes: 360
     steps:
@@ -237,8 +237,8 @@ jobs:
        
     - name: Build Gecko
       run: |
-        cp ./gsi/build/build-gsi-b2g.sh ~/gecko-b2g
-        ./gsi/build/build_gecko.sh
+        cp ./common/build/build-gecko-srcipt.sh ~/gecko-b2g
+        ./common/build/build_gecko.sh
       
     - name: Get Gecko Version
       run: |
@@ -260,21 +260,21 @@ jobs:
       uses: actions/upload-artifact@master
       with:
         name: ${{ env.gecko_version }}
-        path: ~/objdir-gsi-gecko/dist/${{ env.gecko_version }}
+        path: ~/objdir-gecko/dist/${{ env.gecko_version }}
 
     - name: Upload to Gdrive
       run: |
         df -h
-        cd ~/objdir-gsi-gecko/dist
+        cd ~/objdir-gecko/dist
         rclone copy ${{ env.gecko_version }} itd:ci/${remotepath}
         df -h
         
     - name: Send "b2g_api_daemon_build" WebHook
       run: |
-        ./gsi/init/webhook.sh  b2g_api_daemon_build
+        ./gsi/init/webhook.sh  gsi_api_daemon_build
 
   api-daemon_build:
-    if: github.event.action == 'b2g_api_daemon_build'
+    if: github.event.action == 'gsi_api_daemon_build'
     runs-on: ubuntu-18.04
     timeout-minutes: 360
     steps:
@@ -330,4 +330,4 @@ jobs:
 
     - name: Send Done Notify && Send "b2g_build" WebHook
       run: |
-        ./gsi/init/webhook.sh b2g_b2g_build
+        ./gsi/init/webhook.sh gsi_b2g_build
