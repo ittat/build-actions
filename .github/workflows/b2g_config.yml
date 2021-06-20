@@ -1,6 +1,8 @@
 name: b2g_config
 on: 
-  workflow_dispatch:
+  workflow_dispatch: 
+      types: 
+      - b2g_gsi
 
 # NEED  
 # 1. secrets.GIT_ACCESS_TOKEN
