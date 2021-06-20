@@ -56,14 +56,14 @@ jobs:
            
     - name: Fetch source
       run: |    
-        ./b2g/source/repo_source.sh
+        ./gsi/source/repo_source.sh
         
     - name: Fix source
       continue-on-error: true
       run: |    
         echo Fix source 
-        ./b2g/source/fix_soucre.sh
-        sudo rm -rf .repo
+        ./common/source/fix_soucre.sh
+        ./gsi/source/fix_soucre.sh
                   
     # upload sparseimage to gdrive
     - name: Upload Source 
@@ -74,7 +74,7 @@ jobs:
         
     - name: Start build job          
       run: |
-        ./b2g/init/webhook.sh b2g_aosp_build
+        ./gsi/init/webhook.sh b2g_aosp_build
 
   aosp_build:
     if: github.event.action == 'b2g_aosp_build' || github.event.action == 'b2g_b2g_build' 
@@ -94,12 +94,11 @@ jobs:
         ./common/source/download_source_from_gdrive.sh
         df -h
         
-    - name: fix
+    - name: Env
       run: |         
          brew install cpanm 
          sudo cpan LWP::UserAgent
          
-         ####pre-api-daemon
          cd ~
          curl https://packages.preprod.kaiostech.com/ndk/v4/mozbuild.tar.bz2 -o mozbuild.tar.bz2
          tar -xvf mozbuild.tar.bz2
@@ -124,17 +123,16 @@ jobs:
       id: build
       run: |
         df -h
-        ./b2g/build/build_without_gecko.sh
+        ./gsi/build/build_without_gecko.sh
         
 
     - name: B2G Build - Build Source include Gecko
       if: github.event.action == 'b2g_b2g_build'
       run: |
         df -h
-        ./b2g/build/add_pre_api_daemon.sh
-        
+        ./common/build/add_pre_api_daemon.sh
         #### build          
-        ./b2g/build/build_with_gecko.sh
+        ./gsi/build/build_with_gecko.sh
 
 
     - name: Check Current ”error.log“ Status
@@ -153,26 +151,23 @@ jobs:
       id: sysroot
       if: github.event.action == 'b2g_aosp_build' && steps.check.conclusion == 'success' &&  steps.build.outcome == 'success' && steps.build.conclusion == 'success'
       run: |
-        chmod +x ./b2g/build/create-b2g-sysroot.sh
-        chmod +x ./b2g/build/api_sysroot.sh
-        cp ./b2g/build/create-b2g-sysroot.sh ${work}/B2G
-        cp ./b2g/build/api_sysroot.sh ${work}/B2G
+        cp ./common/build/create-b2g-sysroot.sh ${work}/B2G
+        cp ./common/build/create-api_sysroot.sh ${work}/B2G
         pip3 install zstandard
         pip install zstandard
         
         echo repack_b2g-sysroot
-        ./b2g/build/repack_b2g-sysroot.sh
+        ./common/build/repack_b2g-sysroot.sh
         echo repack_api-sysroot
-        ./b2g/build/repack_api-sysroot.sh
+        ./common/build/repack_api-sysroot.sh
         echo Upload b2g-sysroot and api-sysroot
-        ./b2g/source/upload_sysroot.sh
+        ./common/source/upload_sysroot.sh
         
     - name: Updoal systemimage
       if:  github.event.action == 'b2g_b2g_build' 
       continue-on-error: true
       run: |
-         chmod +x ./b2g/source/upload_systemimage.sh  
-         ./b2g/source/upload_systemimage.sh
+         ./common/source/upload_systemimage.sh
         
     - name: Clean system environment
       continue-on-error: true
@@ -182,7 +177,7 @@ jobs:
     - name: Send "build_gecko" WebHook
       if: github.event.action == 'b2g_aosp_build' && steps.check.conclusion == 'success' &&  steps.build.outcome == 'success' && steps.build.conclusion == 'success'
       run: |
-        ./b2g/init/webhook.sh b2g_gecko_build
+        ./gsi/init/webhook.sh b2g_gecko_build
 
     - name: Update Build Source
       if: steps.check.conclusion == 'success' &&  github.event.action == 'b2g_aosp_build' 
@@ -192,7 +187,7 @@ jobs:
     - name: Send "aosp_build" WebHook Again
       if: github.event.action == 'b2g_aosp_build' && steps.build.outcome == 'failure' && steps.build.conclusion == 'success'  &&  steps.check.conclusion == 'success'         
       run: |
-        ./b2g/init/webhook.sh b2g_aosp_build
+        ./gsi/init/webhook.sh b2g_aosp_build
 
   gecko_build:
     if: github.event.action == 'b2g_gecko_build' || github.event_name == 'schedule' 
@@ -242,7 +237,8 @@ jobs:
        
     - name: Build Gecko
       run: |
-          ./b2g/build/build_gecko.sh
+        cp ./gsi/build/build-gsi-b2g.sh ~/gecko-b2g
+        ./gsi/build/build_gecko.sh
       
     - name: Get Gecko Version
       run: |
@@ -275,7 +271,7 @@ jobs:
         
     - name: Send "b2g_api_daemon_build" WebHook
       run: |
-        ./b2g/init/webhook.sh  b2g_api_daemon_build
+        ./gsi/init/webhook.sh  b2g_api_daemon_build
 
   api-daemon_build:
     if: github.event.action == 'b2g_api_daemon_build'
@@ -306,9 +302,6 @@ jobs:
         
         cd ~
         git clone https://github.com/kaiostech/api-daemon 
-        #--depth=1
-        #cd api-daemon
-        #git checkout 405f8d72005b0d753ea3a181246d4f5dbf129669 -b test
         ls -al
         
     - name: build Source
@@ -337,4 +330,4 @@ jobs:
 
     - name: Send Done Notify && Send "b2g_build" WebHook
       run: |
-        ./b2g/init/webhook.sh b2g_b2g_build
+        ./gsi/init/webhook.sh b2g_b2g_build
