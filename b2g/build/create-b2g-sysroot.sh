@@ -213,7 +213,7 @@ out/soong/.intermediates/hardware/interfaces/power/1.0/android.hardware.power@1.
 out/soong/.intermediates/hardware/interfaces/radio/1.0/android.hardware.radio@1.0_genc++_headers/gen
 out/soong/.intermediates/hardware/interfaces/radio/1.1/android.hardware.radio@1.1_genc++_headers/gen
 out/soong/.intermediates/hardware/interfaces/sensors/1.0/android.hardware.sensors@1.0_genc++_headers/gen
-out/soong/.intermediates/hardware/interfaces/sensors/1.0/android.hardware.sensors@2.0_genc++_headers/gen
+out/soong/.intermediates/hardware/interfaces/sensors/2.0/android.hardware.sensors@2.0_genc++_headers/gen
 out/soong/.intermediates/hardware/interfaces/vibrator/1.0/android.hardware.vibrator@1.0_genc++_headers/gen
 out/soong/.intermediates/hardware/interfaces/wifi/1.0/android.hardware.wifi@1.0_genc++_headers/gen
 out/soong/.intermediates/hardware/interfaces/wifi/1.1/android.hardware.wifi@1.1_genc++_headers/gen
