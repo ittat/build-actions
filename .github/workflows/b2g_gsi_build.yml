@@ -180,7 +180,7 @@ jobs:
         ./gsi/init/webhook.sh gsi_gecko_build
 
     - name: Update Build Source
-      if: steps.check.conclusion == 'success' &&  github.event.action == 'b2g_aosp_build' 
+      if: steps.check.conclusion == 'success' &&  github.event.action == 'gsi_aosp_build' 
       run: |
         ./common/source/upload_out_image.sh
             
