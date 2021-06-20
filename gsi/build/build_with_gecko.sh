@@ -1,6 +1,5 @@
 #!/bin/bash
 set -e 
-
 df -h
 ####
 cd ${work}
@@ -16,7 +15,7 @@ export CCACHE_DIR=~/.ccache
 export USE_CCACHE=1
 export DISABLE_SOURCES_XML=true
 export USE_PREBUILT_B2G=1
-#export OUT_DIR_COMMON_BASE=${out_work}
 export PREFERRED_B2G="${work}/pre-gecko/${gecko_version}"
 export SKIP_ABI_CHECKS=true
+#gsi
 gtimeout 245m  ./build-gsi.sh ${build_device_tag} systemimage
