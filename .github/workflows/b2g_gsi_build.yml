@@ -118,7 +118,7 @@ jobs:
         fi
         
     - name: Build Source Without Gecko
-      if: github.event.action == 'b2g_aosp_build'
+      if: github.event.action == 'gsi_aosp_build'
       continue-on-error: true
       id: build
       run: |
@@ -127,7 +127,7 @@ jobs:
         
 
     - name: B2G Build - Build Source include Gecko
-      if: github.event.action == 'b2g_b2g_build'
+      if: github.event.action == 'gsi_b2g_build'
       run: |
         df -h
         ./common/build/add_pre_api_daemon.sh
@@ -149,7 +149,7 @@ jobs:
          
     - name: Repack b2g-sysroot and api-sysroot
       id: sysroot
-      if: github.event.action == 'b2g_aosp_build' && steps.check.conclusion == 'success' &&  steps.build.outcome == 'success' && steps.build.conclusion == 'success'
+      if: github.event.action == 'gsi_aosp_build' && steps.check.conclusion == 'success' &&  steps.build.outcome == 'success' && steps.build.conclusion == 'success'
       run: |
         cp ./common/build/create-b2g-sysroot.sh ${work}/B2G
         cp ./common/build/create-api_sysroot.sh ${work}/B2G
