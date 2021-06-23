@@ -1,5 +1,9 @@
 #!/bin/bash
 set -e 
+
+###build/soong 
+./common/source/patch-b2g-aosp.sh
+
 ####patcher         
 if [ -d "${work}/B2G/patcher" ]; then
   echo apply patch
@@ -11,10 +15,6 @@ fi
 cd ${work}/B2G
 /usr/bin/sed -i '' '14d'  system/sepolicy/tests/Android.bp
 /usr/bin/sed -i '' '65i\'$'\n\"10\.15\"\,\n' build/soong/cc/config/x86_darwin_host.go
-
-###build/soong 
-cd ~
-./common/source/patch-b2g-aosp.sh
 
 ###
 cd ${work}
