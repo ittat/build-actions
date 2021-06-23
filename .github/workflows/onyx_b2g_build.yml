@@ -117,7 +117,7 @@ jobs:
         fi
         
     - name: Build Source Without Gecko
-      if: github.event.action == 'b2g_aosp_build'
+      if: github.event.action == 'onyx_aosp_build'
       continue-on-error: true
       id: build
       run: |
