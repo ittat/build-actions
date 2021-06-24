@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e 
 df -h
+cp common/build/create-api_sysroot.sh  ${work}/B2G
 cd ${work}/B2G
 
 if [ "$device_arch" == "aarch64-linux-android" ]; then
@@ -21,7 +22,7 @@ else
   export TARGET_CPU_VARIANT=generic
 fi
 
-./api_sysroot.sh
+./create-api_sysroot.sh
 sudo rm -rf ./api-sysroot
 ls -al
 mv api-sysroot.tar.zst ${work}
