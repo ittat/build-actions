@@ -217,6 +217,8 @@ jobs:
     - name: Fetch Source
       run: |
         df -h
+        cp ./onyx/source/44fd8680baef9b9b4538dff707eb1f7328756222.patch ~
+        cp ./onyx/source/cff33e0d3ee242a68f0484cc00cda6ed8c02c5f2.patch ~
         cd ~
         curl https://packages.preprod.kaiostech.com/ndk/v4/mozbuild.tar.bz2 -o mozbuild.tar.bz2
         tar -xvf mozbuild.tar.bz2
@@ -224,8 +226,8 @@ jobs:
         cd ~
         git clone https://github.com/kaiostech/gecko-b2g -b gonk
         #for onyx
-        git am ./onyx/source/44fd8680baef9b9b4538dff707eb1f7328756222.patch
-        git am ./onyx/source/cff33e0d3ee242a68f0484cc00cda6ed8c02c5f2.patch
+        git am ~/44fd8680baef9b9b4538dff707eb1f7328756222.patch
+        git am ~/cff33e0d3ee242a68f0484cc00cda6ed8c02c5f2.patch
         #git clone https://github.com/OnePlus-onyx/gecko-b2g-onyx -b onyx --depth=1
         df -h
         
