@@ -128,7 +128,7 @@ jobs:
       if: github.event.action == 'onyx_b2g_build'
       run: |
         df -h
-        ./onyx/build/add_pre_api_daemon.sh
+        ./common/build/add_pre_api_daemon.sh
         #### build          
         ./onyx/build/build_with_gecko.sh
 
