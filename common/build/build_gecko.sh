@@ -8,7 +8,10 @@ cd ~
 rclone copy  itd:ci/${remotepath}/b2g-sysroot.tar.zst ./
 tar -C "$HOME/.mozbuild" -I zstd -x -a -f b2g-sysroot.tar.zst
 
-mkdir ~/objdir-gecko
+mkdir ${HOME}/objdir-gecko
+
+
+tar -C "$HOME/objdir-gecko" -I zstd -x -a -f b2g-sysroot.tar.zst
 
 sudo rm b2g-sysroot.tar.zst
 
