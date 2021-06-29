@@ -25,4 +25,4 @@ mkdir -p ${path_b2g}/defaults
 
 cp -r  ${APIDeamon_PreBuild}/http_root  ${TARGET_OUT}/api-daemon
 cp ${APIDeamon_PreBuild}/${device_arch}/api-daemon ${TARGET_OUT}/bin/
-chmod +x ${TARGET_OUT}/bin/api-daem
+chmod +x ${TARGET_OUT}/bin/api-daemon
