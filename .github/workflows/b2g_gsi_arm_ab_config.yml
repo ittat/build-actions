@@ -1,7 +1,7 @@
-name: onyx_b2g_config
+name: b2g-gsi-arm_ab-config
 on: 
-  workflow_dispatch:
-
+  workflow_dispatch: 
+  
 # NEED  
 # 1. secrets.GIT_ACCESS_TOKEN
 # 2. secrets.RCLONE
@@ -13,15 +13,21 @@ on:
 # 6. b2g_source: 
 #         remote soucre address
 # for example:
-env:
+env: 
   GIT_ACCESS_TOKEN: ${{secrets.GIT_ACCESS_TOKEN}}
-  device_name: onyx
+  device_name: phhgsi_arm_ab
   repo_dispatches: "https://api.github.com/repos/b2g-gsi/build-actions/dispatches"
   b2g_source: "https://github.com/b2gos/B2G"
   b2g_branch: "gsi"
-  build_device_tag: onyx
+  build_device_tag: gsi_arm_ab
   device_arch: armv7-linux-androideabi
   actions_branch: b2g_gsi
+#onyx
+#phhgsi_arm64_a  
+#phhgsi_arm64_ab
+#phhgsi_arm_a 
+#phhgsi_arm_ab  
+#RUST_TARGET := armv7-linux-androideabi
 
 jobs: 
   config:
@@ -32,5 +38,5 @@ jobs:
 
     - name: Action        
       run: |
-        ./onyx/init/webhook.sh onyx_b2g_repack
-        #onyx_b2g_repack onyx_aosp_build onyx_gecko_build onyx_b2g_build onyx_api_daemon_build
+        ./gsi/init/webhook.sh gsi_b2g_repack
+        #gsi_b2g_repack gsi_aosp_build gsi_gecko_build gsi_b2g_build gsi_api_daemon_build
