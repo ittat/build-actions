@@ -98,11 +98,7 @@ jobs:
       run: |         
          brew install cpanm 
          sudo cpan LWP::UserAgent
-         
-         cd ~
-         curl https://packages.preprod.kaiostech.com/ndk/v4/mozbuild.tar.bz2 -o mozbuild.tar.bz2
-         tar -xvf mozbuild.tar.bz2
-         sudo rm mozbuild.tar.bz2
+         ./common/source/download_kaios_ndk.sh
 
     - name: Check The Previous “error.log”
       run: |
@@ -217,10 +213,7 @@ jobs:
     - name: Fetch Source
       run: |
         df -h
-        cd ~
-        curl https://packages.preprod.kaiostech.com/ndk/v4/mozbuild.tar.bz2 -o mozbuild.tar.bz2
-        tar -xvf mozbuild.tar.bz2
-        sudo rm mozbuild.tar.bz2
+        ./common/source/download_kaios_ndk.sh
         cd ~
         git clone https://github.com/kaiostech/gecko-b2g -b gonk --depth=1
         df -h
@@ -229,11 +222,7 @@ jobs:
       run: |
         df -h
         cd ~/gecko-b2g
-        export SHELL=/bin/bash
-        sudo apt update
-        export LOCAL_NDK_BASE_URL='ftp://ftp.kaiostech.com/ndk/android-ndk'
-        ./mach bootstrap --application-choice 'GeckoView/Firefox for Android'
-        df -h
+        ./common/build/bootstrap_gecko.sh
        
     - name: Build Gecko
       run: |
@@ -290,16 +279,14 @@ jobs:
         
     - name: Download Source
       run: |
+        ./common/source/download_kaios_ndk.sh
         cd ~
         ####
         rustup target add aarch64-linux-android armv7-linux-androideabi
-        cd ~
-        curl https://packages.preprod.kaiostech.com/ndk/v4/mozbuild.tar.bz2 | tar -C ${HOME}/ -xj
         rclone copy  itd:ci/${remotepath}/api-sysroot.tar.zst ./
         mkdir ~/.mozbuild/api-sysroot
         tar -C "$HOME/.mozbuild/api-sysroot" -I zstd -x -a -f api-sysroot.tar.zst
         ls ~/.mozbuild/api-sysroot/out
-        
         cd ~
         git clone https://github.com/kaiostech/api-daemon 
         ls -al
