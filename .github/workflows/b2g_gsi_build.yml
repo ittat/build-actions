@@ -221,7 +221,6 @@ jobs:
     - name: Bootstrap Gecko
       run: |
         df -h
-        cd ~/gecko-b2g
         ./common/build/bootstrap_gecko.sh
        
     - name: Build Gecko
