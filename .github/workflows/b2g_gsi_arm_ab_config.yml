@@ -38,5 +38,5 @@ jobs:
 
     - name: Action        
       run: |
-        ./gsi/init/webhook.sh gsi_b2g_repack
+        ./gsi/init/webhook.sh gsi_gecko_build
         #gsi_b2g_repack gsi_aosp_build gsi_gecko_build gsi_b2g_build gsi_api_daemon_build
