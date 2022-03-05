@@ -218,6 +218,10 @@ jobs:
         git clone https://github.com/kaiostech/gecko-b2g -b gonk --depth=1
         df -h
         
+    - uses: actions/checkout@v2
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
+        
     - name: Bootstrap Gecko
       run: |
         df -h
