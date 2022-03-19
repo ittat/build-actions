@@ -32,5 +32,5 @@ jobs:
 
     - name: Action        
       run: |
-        ./onyx/init/webhook.sh onyx_b2g_repack
+        ./onyx/init/webhook.sh onyx_aosp_build
         #onyx_b2g_repack onyx_aosp_build onyx_gecko_build onyx_b2g_build onyx_api_daemon_build
