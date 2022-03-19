@@ -226,6 +226,7 @@ jobs:
         df -h
         ./common/build/bootstrap_gecko.sh
         ./common/source/download_kaios_ndk.sh
+        rustup target add aarch64-linux-android armv7-linux-androideabi
        
     - name: Build Gecko
       run: |
