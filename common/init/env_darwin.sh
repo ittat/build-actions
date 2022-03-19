@@ -4,7 +4,7 @@ df -h
 ####
 more /System/Library/CoreServices/SystemVersion.plist
 ls /Applications/Xcode_*
-sudo xcode-select --switch /Applications/Xcode_11.app/Contents/Developer
+sudo xcode-select --switch /Applications/Xcode_11.2.app/Contents/Developer
 #sudo xcode-select --switch /Applications/Xcode_12.4.app/Contents/Developer
 echo [Set] Xcode_12
 
