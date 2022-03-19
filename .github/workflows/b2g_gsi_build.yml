@@ -35,7 +35,7 @@ env:
 jobs: 
   repack_aosp:        
     if: github.event.action == 'gsi_b2g_repack'
-    runs-on: macos-latest
+    runs-on: macos-10.15
     timeout-minutes: 360
     steps:
     - name: Checkout
@@ -78,7 +78,7 @@ jobs:
 
   aosp_build:
     if: github.event.action == 'gsi_aosp_build' || github.event.action == 'gsi_b2g_build' 
-    runs-on: macos-latest
+    runs-on: macos-10.15
     timeout-minutes: 360
     steps:
     - name: Checkout
