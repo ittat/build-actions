@@ -213,19 +213,19 @@ jobs:
     - name: Fetch Source
       run: |
         df -h
-        ./common/source/download_kaios_ndk.sh
         cd ~
         git clone https://github.com/kaiostech/gecko-b2g -b gonk --depth=1
         df -h
         
-    - uses: actions/checkout@v2
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
+#     - uses: actions/checkout@v2
+#     - name: Setup tmate session
+#       uses: mxschmitt/action-tmate@v3
         
     - name: Bootstrap Gecko
       run: |
         df -h
         ./common/build/bootstrap_gecko.sh
+        ./common/source/download_kaios_ndk.sh
        
     - name: Build Gecko
       run: |
