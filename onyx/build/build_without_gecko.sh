@@ -11,5 +11,6 @@ export DISABLE_SOURCES_XML=true
 #export OUT_DIR_COMMON_BASE=${out_work}
 export PREFERRED_B2G=${work}/b2g-dummy.tar.bz2
 export USE_PREBUILT_B2G=1
+export ANDROID_NDK="${HOME}/.mozbuild/android-ndk-r21d"
 gtimeout 245m ./build.sh -j16
 df -h
