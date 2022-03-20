@@ -2,6 +2,10 @@
 set -e 
 df -h
 ####
+
+
+sudo xcode-select --switch /Applications/Xcode_11.5.app/Contents/Developer
+
 export CCACHE_DIR=~/.ccache
 /usr/local/bin/ccache  -M 20G
 /usr/local/bin/ccache -s
