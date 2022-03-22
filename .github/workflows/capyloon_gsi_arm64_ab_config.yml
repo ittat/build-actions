@@ -1,0 +1,42 @@
+name: b2g-gsi-arm64_ab-config
+on: 
+  workflow_dispatch: 
+  
+# NEED  
+# 1. secrets.GIT_ACCESS_TOKEN
+# 2. secrets.RCLONE
+# 3. device_name eg；onyx(oneplus x), bacon(oneplus one), phhgsi_arm64_a(phh's gsi) etc.
+#     out/device_name
+# 4. build_device_tag: eg: full-onyx-eng, full-bacon-userdebug etc.
+#    gsi-build.sh build_device_tag
+# 5. repo_dispatches: https://api.github.com/repos/(you id)/(you repo name)/dispatches
+# 6. b2g_source: 
+#         remote soucre address
+# for example:
+env: 
+  GIT_ACCESS_TOKEN: ${{secrets.GIT_ACCESS_TOKEN}}
+  device_name: phhgsi_arm64_ab
+  repo_dispatches: "https://api.github.com/repos/b2g-gsi/build-actions/dispatches"
+  b2g_source: "https://github.com/capyloon/B2G"
+  b2g_branch: "master"
+  build_device_tag: gsi_arm64_ab
+  device_arch: aarch64-linux-android
+  actions_branch: b2g_gsi
+#onyx
+#phhgsi_arm64_a  
+#phhgsi_arm64_ab
+#phhgsi_arm_a 
+#phhgsi_arm_ab  
+#RUST_TARGET := armv7-linux-androideabi
+
+jobs: 
+  config:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Action        
+      run: |
+        ./gsi/init/webhook.sh gsi_b2g_repack
+        #gsi_b2g_repack gsi_aosp_build gsi_gecko_build gsi_b2g_build gsi_api_daemon_build
