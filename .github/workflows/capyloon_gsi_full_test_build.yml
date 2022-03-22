@@ -2,11 +2,11 @@ name: capyloon-gsi-ci
 on: 
   repository_dispatch:
       types: 
-      - gsi_b2g_repack
-      - gsi_aosp_build
-      # - gsi_gecko_build
-      - gsi_b2g_build
-      - gsi_api_daemon_build
+      - capyloon_gsi_b2g_repack
+      - capyloon_capyloon_gsi_aosp_build
+      # - capyloon_gsi_gecko_build
+      - capyloon_gsi_b2g_build
+      - capyloon_gsi_api_daemon_build
       
 env:
   RCLONE: ${{secrets.RCLONE}}
@@ -34,7 +34,7 @@ env:
 
 jobs: 
   repack_aosp:        
-    if: github.event.action == 'gsi_b2g_repack'
+    if: github.event.action == 'capyloon_gsi_b2g_repack'
     runs-on: macos-10.15
     timeout-minutes: 360
     steps:
@@ -74,10 +74,10 @@ jobs:
         
     - name: Start build job          
       run: |
-        ./gsi/init/webhook.sh gsi_aosp_build
+        ./gsi/init/webhook.sh capyloon_gsi_aosp_build
 
   aosp_build:
-    if: github.event.action == 'gsi_aosp_build' || github.event.action == 'gsi_b2g_build' 
+    if: github.event.action == 'capyloon_capyloon_gsi_aosp_build' || github.event.action == 'capyloon_gsi_b2g_build' 
     runs-on: macos-10.15
     timeout-minutes: 360
     steps:
@@ -114,12 +114,13 @@ jobs:
         fi
         
     - name: Build
-      if: github.event.action == 'gsi_aosp_build'
+      if: github.event.action == 'capyloon_capyloon_gsi_aosp_build'
       continue-on-error: true
       id: build
       run: |
         df -h
-        ./gsi/full/build/build.sh
+        chmod +x ./gsi/full/build.sh
+        ./gsi/full/build.sh
         
 
     # - name: B2G Build - Build Source include Gecko
@@ -145,7 +146,7 @@ jobs:
          
     # - name: Repack b2g-sysroot and api-sysroot
     #   id: sysroot
-    #   if: github.event.action == 'gsi_aosp_build' && steps.check.conclusion == 'success' &&  steps.build.outcome == 'success' && steps.build.conclusion == 'success'
+    #   if: github.event.action == 'capyloon_gsi_aosp_build' && steps.check.conclusion == 'success' &&  steps.build.outcome == 'success' && steps.build.conclusion == 'success'
     #   run: |
     #     cp ./common/build/create-b2g-sysroot.sh ${work}/B2G
     #     cp ./common/build/create-api_sysroot.sh ${work}/B2G
@@ -160,7 +161,7 @@ jobs:
     #     ./common/source/upload_sysroot.sh
         
     - name: Updoal systemimage
-      if:  github.event.action == 'gsi_b2g_build' 
+      if:  github.event.action == 'capyloon_gsi_b2g_build' 
       continue-on-error: true
       run: |
          ./common/source/upload_systemimage.sh
@@ -171,22 +172,22 @@ jobs:
         ./common/init/all_unmount_darwin.sh
         
     - name: Send "build_gecko" WebHook
-      if: github.event.action == 'gsi_aosp_build' && steps.check.conclusion == 'success' &&  steps.build.outcome == 'success' && steps.build.conclusion == 'success'
+      if: github.event.action == 'capyloon_gsi_aosp_build' && steps.check.conclusion == 'success' &&  steps.build.outcome == 'success' && steps.build.conclusion == 'success'
       run: |
-        ./gsi/init/webhook.sh gsi_gecko_build
+        ./gsi/init/webhook.sh capyloon_gsi_gecko_build
 
     - name: Update Build Source
-      if: steps.check.conclusion == 'success' &&  github.event.action == 'gsi_aosp_build' 
+      if: steps.check.conclusion == 'success' &&  github.event.action == 'capyloon_gsi_aosp_build' 
       run: |
         ./common/source/upload_out_image.sh
             
     - name: Send "aosp_build" WebHook Again
-      if: github.event.action == 'gsi_aosp_build' && steps.build.outcome == 'failure' && steps.build.conclusion == 'success'  &&  steps.check.conclusion == 'success'         
+      if: github.event.action == 'capyloon_gsi_aosp_build' && steps.build.outcome == 'failure' && steps.build.conclusion == 'success'  &&  steps.check.conclusion == 'success'         
       run: |
-        ./gsi/init/webhook.sh gsi_aosp_build
+        ./gsi/init/webhook.sh capyloon_gsi_aosp_build
 
 #   gecko_build:
-#     if: github.event.action == 'gsi_gecko_build' || github.event_name == 'schedule' 
+#     if: github.event.action == 'capyloon_gsi_gecko_build' || github.event_name == 'schedule' 
 #     runs-on: ubuntu-18.04
 #     timeout-minutes: 360
 #     steps:
