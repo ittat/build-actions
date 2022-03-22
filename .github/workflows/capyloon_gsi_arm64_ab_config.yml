@@ -1,4 +1,4 @@
-name: b2g-gsi-arm64_ab-config
+name: capyloon_gsi_arm64_ab_config
 on: 
   workflow_dispatch: 
   
