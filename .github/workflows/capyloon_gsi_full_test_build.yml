@@ -3,7 +3,7 @@ on:
   repository_dispatch:
       types: 
       - capyloon_gsi_b2g_repack
-      - capyloon_capyloon_gsi_aosp_build
+      - capyloon_gsi_aosp_build
       # - capyloon_gsi_gecko_build
       - capyloon_gsi_b2g_build
       - capyloon_gsi_api_daemon_build
