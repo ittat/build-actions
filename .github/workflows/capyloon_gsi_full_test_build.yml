@@ -89,6 +89,8 @@ jobs:
     - name: Initialization system environment
       run: |
         ./common/init/all_unmount_darwin.sh
+        ./common/build/bootstrap_gecko.sh
+        ./common/source/download_kaios_ndk.sh
         ./common/init/clean_space_darwin.sh
         ./common/init/env_darwin.sh
         ./common/source/download_source_from_gdrive.sh
