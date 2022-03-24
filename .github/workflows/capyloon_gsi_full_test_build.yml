@@ -85,11 +85,15 @@ jobs:
       uses: actions/checkout@v2
       with:
         ref: ${{ env.actions_branch }}
+  
+    - uses: actions/checkout@v2
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
           
     - name: Initialization system environment
       run: |
         ./common/init/all_unmount_darwin.sh
-        brew install mercurial
+        #brew install mercurial
 
         ./common/build/bootstrap_gecko.sh
         ./common/source/download_kaios_ndk.sh
