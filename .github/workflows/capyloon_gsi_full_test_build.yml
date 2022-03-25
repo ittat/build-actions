@@ -105,6 +105,13 @@ jobs:
         ./common/source/download_source_from_gdrive.sh
         df -h
         
+    - uses: hecrj/setup-rust-action@v1
+      with:
+        rust-version: stable
+    - uses: actions/checkout@master
+    - name: Install sccache
+      run: cargo install sccache
+        
     - name: Env
       run: |         
          brew install cpanm 
