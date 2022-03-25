@@ -116,7 +116,7 @@ jobs:
       run: |         
          brew install cpanm 
          sudo cpan LWP::UserAgent
-         ./common/source/download_kaios_ndk.sh
+        #  ./common/source/download_kaios_ndk.sh
 
     - name: Check The Previous “error.log”
       run: |
