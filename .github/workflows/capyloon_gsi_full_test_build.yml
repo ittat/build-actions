@@ -86,16 +86,20 @@ jobs:
       with:
         ref: ${{ env.actions_branch }}
   
-    - uses: actions/checkout@v2
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
+    # - uses: actions/checkout@v2
+    # - name: Setup tmate session
+    #   uses: mxschmitt/action-tmate@v3
 
 
-#     - name: bootstrap_gecko
-#       run: |
-#         brew install mercurial
-#         ./common/build/bootstrap_gecko.sh
-#         ./common/source/download_kaios_ndk.sh
+    - name: bootstrap_gecko
+      run: |
+        # brew install mercurial
+        # ./common/build/bootstrap_gecko.sh
+        # ./common/source/download_kaios_ndk.sh
+        git clone https://github.com/mozilla/gecko-dev --depth=1
+        cd ./gecko-dev
+        export MOZBUILD_STATE_PATH=~/.mozbuild
+        ./mach  --no-interactive bootstrap --application-choice=mobile_android
 
     - name: Initialization system environment
       run: |
