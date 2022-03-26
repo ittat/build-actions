@@ -9,7 +9,7 @@
 #wget -q https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py -O bootstrap.py 
 #python3 bootstrap.py --no-interactive --application-choice=mobile_android
 
-cd ~/gecko-b2g
+cd ~/gecko-dev
 spawn  ./mach  --no-interactive bootstrap --application-choice=mobile_android
 
 expect {
