@@ -1,4 +1,4 @@
-#!/usr/bin/expect -f
+#!/usr/bin/expect
 set -e 
 
 # cd ~/gecko-b2g
@@ -9,7 +9,7 @@ set -e
 #wget -q https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py -O bootstrap.py 
 #python3 bootstrap.py --no-interactive --application-choice=mobile_android
 
-
+cd ~/gecko-b2g
 spawn  ./mach  --no-interactive bootstrap --application-choice=mobile_android
 
 expect {
