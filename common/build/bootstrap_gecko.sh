@@ -1,5 +1,5 @@
 #!/usr/bin/expect
-set -e 
+
 
 # cd ~/gecko-b2g
 # export SHELL=/bin/bash
