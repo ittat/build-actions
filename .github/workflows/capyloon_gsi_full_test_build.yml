@@ -85,10 +85,6 @@ jobs:
       uses: actions/checkout@v2
       with:
         ref: ${{ env.actions_branch }}
-  
-    - uses: actions/checkout@v2
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
 
 
     - name: bootstrap_gecko
@@ -97,14 +93,25 @@ jobs:
         # ./common/source/download_kaios_ndk.sh
         cp ./common/build/bootstrap_gecko.sh ~/
         cd ~
-        git clone https://github.com/mozilla/gecko-dev --depth=1
+        git clone https://github.com/mozilla/gecko-dev --depth=1 -b master
         cd ./gecko-dev
         export MOZBUILD_STATE_PATH=~/.mozbuild
-        ~/bootstrap_gecko.sh
-        # echo A A | ./mach  --no-interactive bootstrap --application-choice=mobile_android
+        #~/bootstrap_gecko.sh
+
+
+        #./mach  --no-interactive bootstrap --application-choice=mobile_android
+
+
+  
+    - uses: actions/checkout@v2
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
+
+      
 
     - name: Initialization system environment
       run: |
+        ./gsi/full/download_kaios_ndk.sh
         ./common/init/all_unmount_darwin.sh
         ./common/init/clean_space_darwin.sh
         ./common/init/env_darwin.sh
