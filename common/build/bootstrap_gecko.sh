@@ -12,8 +12,9 @@
 cd ~/gecko-dev
 spawn  ./mach  --no-interactive bootstrap --application-choice=mobile_android
 
-expect {
-    "*replace android-ndk-r21*" {exp_send "A\r";exp_continue}
-  }
-expect eof
+  expect "*replace android-ndk-r21*"  
+send "A\r" 
+  expect "*replace android-ndk-r21*"  
+send "A\r" 
+interact      
 
