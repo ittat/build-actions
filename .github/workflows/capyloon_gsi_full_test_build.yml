@@ -95,10 +95,12 @@ jobs:
       run: |
         # brew install mercurial
         # ./common/source/download_kaios_ndk.sh
+        cd ~
+        cp ./common/build/bootstrap_gecko.sh ./
         git clone https://github.com/mozilla/gecko-dev --depth=1
         cd ./gecko-dev
         export MOZBUILD_STATE_PATH=~/.mozbuild
-        ./common/build/bootstrap_gecko.sh
+        ~/bootstrap_gecko.sh
         # echo A A | ./mach  --no-interactive bootstrap --application-choice=mobile_android
 
     - name: Initialization system environment
