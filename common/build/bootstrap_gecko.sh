@@ -13,7 +13,7 @@ cd ~/gecko-dev
 spawn  ./mach  --no-interactive bootstrap --application-choice=mobile_android
 
 expect {
-    "*replace android-ndk-r21d/CHANGELOG.md? [y]es, [n]o, [A]ll, [N]one, [r]ename:" {exp_send "A\r";exp_continue}
+    "*replace android-ndk-r21*" {exp_send "A\r";exp_continue}
   }
 expect eof
 
