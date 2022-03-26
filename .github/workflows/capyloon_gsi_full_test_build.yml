@@ -111,6 +111,7 @@ jobs:
 
     - name: Initialization system environment
       run: |
+        chmod +x ./gsi/full/download_kaios_ndk.sh
         ./gsi/full/download_kaios_ndk.sh
         ./common/init/all_unmount_darwin.sh
         ./common/init/clean_space_darwin.sh
