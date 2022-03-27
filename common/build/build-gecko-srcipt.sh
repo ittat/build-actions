@@ -41,13 +41,6 @@ fi
 
 export ANDROID_PLATFORM=android-${PLATFORM_VERSION}
 
-if [ -z ${GET_FRAMEBUFFER_FORMAT_FROM_HWC+x} ]; then
-    echo "GET_FRAMEBUFFER_FORMAT_FROM_HWC is not set"
-else
-    HWC_DEFINE="-DGET_FRAMEBUFFER_FORMAT_FROM_HWC"
-    echo "Setting -DGET_FRAMEBUFFER_FORMAT_FROM_HWC"
-fi
-
 # When user build, check if the JS shell is available. If not, download it
 # to make sure we can minify JS code when packaging.
 if [[ "$VARIANT" == "user" ]];then
@@ -121,8 +114,6 @@ export CROSS_TOOLCHAIN_LINKER_PATH=${CROSS_TOOLCHAIN_LINKER_PATH=:-$GONK_PATH/pr
 
 export PATH=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin:$GONK_PATH/prebuilts/linux-x86_64/bin/:$CLANG_PATH:$PYTHON_PATH:$CROSS_TOOLCHAIN_LINKER_PATH:$PATH
 
-SYSROOT=$ANDROID_NDK/platforms/$ANDROID_PLATFORM/$ARCH_DIR/
-
 export GONK_PRODUCT=$GONK_PRODUCT_NAME
 
 # Create the sysroot
@@ -136,21 +127,25 @@ if [ -d "koost" ]; then
     export BUILD_KOOST=1
 fi
 
-#rm -rf "${SYSROOT_DEST}/b2g-sysroot"
-#taskcluster/scripts/misc/create-b2g-sysroot.sh "${GONK_PATH}" "${SYSROOT_DEST}"
+# Export OEM hook flag since it's used by create-b2g-sysroot.sh for HIDL
+if [ "$PRODUCT_MANUFACTURER" == "QUALCOMM" ]; then
+    export DISABLE_OEMHOOK
+else
+    # OEM hook is only supported on Qualcomm platform
+    export DISABLE_OEMHOOK=1
+fi
+
+if [ -z ${B2G_STANDALONE_BUILD+x} ]; then
+  rm -rf "${SYSROOT_DEST}/b2g-sysroot"
+  taskcluster/scripts/misc/create-b2g-sysroot.sh "${GONK_PATH}" "${SYSROOT_DEST}"
+fi
 
 rustc --version
 
-export CFLAGS="-Wno-nullability-completeness"
-
-export CPPFLAGS="-DANDROID -DTARGET_OS_GONK \
--DJE_FORCE_SYNC_COMPARE_AND_SWAP_4=1 \
--D_USING_LIBCXX \
--DGR_GL_USE_NEW_SHADER_SOURCE_SIGNATURE=1 \
--isystem $ANDROID_NDK/platforms/$ANDROID_PLATFORM/$ARCH_DIR/usr/include"
-
 export ANDROID_PLATFORM=$ANDROID_PLATFORM
-
-export LDFLAGS="--sysroot=${SYSROOT}"
+export PRODUCTION_OS_NAME=$PRODUCTION_OS_NAME
+# force mach to use system python installation
+export MACH_USE_SYSTEM_PYTHON=${MACH_USE_SYSTEM_PYTHON-1}
+export MOZ_LINKER=
 
 ./mach build $@

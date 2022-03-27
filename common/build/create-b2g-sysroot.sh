@@ -113,6 +113,7 @@ out/target/product/${GONK_PRODUCT_NAME}/system/lib${BINSUFFIX}/libhwbinder.so
 out/target/product/${GONK_PRODUCT_NAME}/system/lib${BINSUFFIX}/libmedia_helper.so
 out/target/product/${GONK_PRODUCT_NAME}/system/lib${BINSUFFIX}/libmedia_omx.so
 out/target/product/${GONK_PRODUCT_NAME}/system/lib${BINSUFFIX}/libmedia.so
+out/target/product/${GONK_PRODUCT_NAME}/system/lib${BINSUFFIX}/libmediadrm.so
 out/target/product/${GONK_PRODUCT_NAME}/system/lib${BINSUFFIX}/libmtp.so
 out/target/product/${GONK_PRODUCT_NAME}/system/lib${BINSUFFIX}/libnetdbpf.so
 out/target/product/${GONK_PRODUCT_NAME}/system/lib${BINSUFFIX}/libstagefright_foundation.so
@@ -229,6 +230,19 @@ out/soong/.intermediates/system/libhidl/transport/base/1.0/android.hidl.base@1.0
 out/soong/.intermediates/system/libhidl/transport/manager/1.0/android.hidl.manager@1.0_genc++_headers/gen"
 
 copy_to_sysroot "${GENERATED_HIDL_HEADERS}" "include"
+
+
+if test -z "$DISABLE_OEMHOOK"; then
+    # Put HIDL headers and libraries of OEM hook into sysroot
+    rsync --times --no-relative --copy-links \
+        "${src}/out/target/product/${GONK_PRODUCT_NAME}/system/product/lib${BINSUFFIX}/vendor.qti.hardware.radio.qcrilhook@1.0.so" \
+        "${dest}/b2g-sysroot/libs/"
+    rsync --times --no-relative --copy-links -r \
+        "${src}/out/soong/.intermediates/vendor/qcom/proprietary/commonsys-intf/telephony/interfaces/hal/qcrilhook/1.0/vendor.qti.hardware.radio.qcrilhook@1.0_genc++_headers/gen/" \
+        "${dest}/b2g-sysroot/include/"
+else
+    echo "OEM hook is disabled by DISABLE_OEMHOOK"
+fi
 
 if [ ! -z ${BUILD_KOOST+x} ]; then
 
