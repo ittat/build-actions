@@ -98,10 +98,7 @@ jobs:
          brew install cpanm 
          sudo cpan LWP::UserAgent
          
-         cd ~
-         curl https://packages.preprod.kaiostech.com/ndk/v4/mozbuild.tar.bz2 -o mozbuild.tar.bz2
-         tar -xvf mozbuild.tar.bz2
-         sudo rm mozbuild.tar.bz2
+         ./common/source/download_kaios_ndk.sh
         
     - name: Check The Previous “error.log”
       run: |
