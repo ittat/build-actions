@@ -1,4 +1,5 @@
-#!/usr/bin/sh
+#!/bin/bash
+set -e 
 
 cd ~/gecko-b2g
 export SHELL=/bin/bash
