@@ -223,9 +223,11 @@ jobs:
         cd ~
         git clone https://github.com/kaiostech/gecko-b2g -b gonk
         #for onyx
-        cd gecko-b2g
-        git am ~/44fd8680baef9b9b4538dff707eb1f7328756222.patch
-        git am ~/cff33e0d3ee242a68f0484cc00cda6ed8c02c5f2.patch
+        # cd gecko-b2g
+        # git am ~/44fd8680baef9b9b4538dff707eb1f7328756222.patch
+        # git am ~/cff33e0d3ee242a68f0484cc00cda6ed8c02c5f2.patch
+
+
         #git clone https://github.com/OnePlus-onyx/gecko-b2g-onyx -b onyx --depth=1
         df -h
         
