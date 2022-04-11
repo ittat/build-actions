@@ -9,7 +9,8 @@ cd ~
 
 
 cd ~/.mozbuild
-wget https://github.com/b2g-gsi/build-actions/releases/download/ndk-macos/android-ndk-0-darwin-x86_64.tar.bz2 | tar -C ./ -xj
+wget https://github.com/b2g-gsi/build-actions/releases/download/ndk-macos/android-ndk-0-darwin-x86_64.tar.bz2 
+tar -zxvf ./android-ndk-0-darwin-x86_64.tar.bz2 
 
 mkdir ~/old
 curl https://packages.preprod.kaiostech.com/ndk/v7/mozbuild.tar.bz2 | tar -C ${HOME}/old -xj
