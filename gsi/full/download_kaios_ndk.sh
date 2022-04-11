@@ -8,7 +8,7 @@ cd ~
 # cd ~
 
 
-cd ~/mozbuild
+cd ~/.mozbuild
 curl https://github.com/b2g-gsi/build-actions/releases/download/ndk-macos/android-ndk-0-darwin-x86_64.tar.bz2 | tar -C ./ -xj
 
 mkdir ~/old
